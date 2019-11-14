@@ -39,7 +39,7 @@
     import { Icon } from 'leaflet'
     delete Icon.Default.prototype._getIconUrl;
     import Influx from 'influx'
-    const client = new Influx.InfluxDB('http://cesar:password@localhost:8086/Altis_DB');
+    const client = new Influx.InfluxDB('http://admin:?exemple!@localhost:8086/Altis_DB');
 
     Icon.Default.mergeOptions({
         iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),

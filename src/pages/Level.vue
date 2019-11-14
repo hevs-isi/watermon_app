@@ -9,7 +9,7 @@
     import Influx from 'influx'
     import moment from 'moment'
     import StockChart from '../components/StockChart.vue'
-    const client = new Influx.InfluxDB('http://cesar:password@localhost:8086/Altis_DB');
+    const client = new Influx.InfluxDB('http://admin:?exemple!@localhost:8086/Altis_DB');
     export default {
         props : [
             'title_text'
