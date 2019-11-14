@@ -39,7 +39,14 @@
     import { Icon } from 'leaflet'
     delete Icon.Default.prototype._getIconUrl;
     import Influx from 'influx'
-    const client = new Influx.InfluxDB('https://ro:ro@watermon.ch/influx/Altis_DB');
+    const client = new Influx.InfluxDB({
+        database: 'Altis_DB',
+        host: 'influx.watermon.ch',
+        port: '443',
+        protocol: 'https',
+        username: 'ro',
+        password: 'ro'
+    });
 
     Icon.Default.mergeOptions({
         iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
