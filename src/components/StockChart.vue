@@ -6,7 +6,6 @@
     export default {
         props : [
             'data',
-            'title'
         ],
         data () {
             return {
@@ -38,9 +37,6 @@
                             text: 'All'
                         }]
                     },
-                    title: {
-                        text: this.title
-                    },
                     series: this.data
                 }
             }
@@ -49,9 +45,6 @@
             data (newValue) {
                 this.stockOptions.series = newValue
             },
-            title(newValue) {
-                this.stockOptions.title = newValue
-            }
 
         }
     }

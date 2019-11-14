@@ -16,6 +16,7 @@
     name: 'App',
     components: {
       Navbar,
+
     },
 
   }
