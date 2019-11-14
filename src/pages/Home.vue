@@ -1,9 +1,8 @@
 <template>
     <div class="home">
-        <h1>Capteurs</h1>
         <l-map
                 class="m-auto"
-                style="height: 750px; width: 1400px"
+                style="height: 800px; width: 1600px"
                 :zoom="zoom"
                 :center="center"
                 @update:zoom="zoomUpdated"
@@ -14,20 +13,18 @@
 
             <l-tile-layer :url="url"></l-tile-layer>
             <!--<l-marker :lat-lng="marker"></l-marker>-->
-            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index">
+            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index" @click="loadData(sensor.id)">
                 <l-popup>
                     <div v-if="sensor.type===1">
                         <h4>{{sensor.position_name}}</h4>
                         <div>Pression : {{sensor.pressure}} bar     </div>
                         <div>Débit : {{sensor.debit}} m3h     </div>
                         <div>Niveau : {{sensor.level}} mm     </div>
-                        <button v-on:click="loadData(sensor.id)">Charger data</button>
                     </div>
                     <div v-if="sensor.type===2">
                         <h4>{{sensor.position_name}}</h4>
                         <div>Humidité du sol : {{sensor.humidity*100}} %  </div>
                         <div>Température du sol : {{sensor.temp}} °C   </div>
-                        <button v-on:click="loadData(sensor.id)">Charger data</button>
                     </div>
                 </l-popup>
             </l-marker>

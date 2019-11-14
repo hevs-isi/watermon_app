@@ -1,15 +1,16 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="light" id="navbar">
-
                 <b-navbar-brand>
-                        <img class="" src="https://www.hevs.ch/img/logo-hes-so-valais-2019.png" height="50%" >
+                        <img class="" src="https://www.hevs.ch/img/logo-hes-so-valais-2019.png" height="60em" >
                 </b-navbar-brand>
             <b-container>
-                <b-navbar-brand href="/#/">Watermon</b-navbar-brand>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
+                        <b-nav-item href="/#/">
+                            Carte
+                        </b-nav-item>
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content">Mesures de niveau</template>
