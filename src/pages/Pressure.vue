@@ -1,10 +1,48 @@
 <template>
     <div class="pressure">
         <div class="h2">Mesures : {{sectorName}}</div>
-        <button v-on:click="loadPressureData">Charger data</button>
-        <StockChart :data="series_pressure"/>
-        <button v-on:click="loadDebitData">Charger data</button>
-        <StockChart :data="series_debit"/>
+
+        <b-row align-v="center" class="text-center">
+            <b-col sm="2">
+                <div class="mb-4" style="font-size: 130%">Pression d'eau</div>
+                <img src="../assets/svg/meter.svg" class="my-auto" style="max-width: 50%"/>
+            </b-col>
+            <b-col sm>
+                <StockChart :data="series_pressure"/>
+            </b-col>
+            <b-col sm="2">
+                <div class="" style="font-size: 130%">Pression d'eau</div>
+                <div class="" style="font-size: 200%">{{lastPressureValue}}</div>
+            </b-col>
+        </b-row>
+
+        <b-row align-v="center" class="text-center">
+            <b-col>
+                <div class="mb-4" style="font-size: 130%">Débit d'eau</div>
+                <img src="../assets/svg/watermeter.svg" class="my-auto" style="max-width: 50%"/>
+            </b-col>
+            <b-col cols="8">
+                <StockChart :data="series_debit"/>
+            </b-col>
+            <b-col>
+                <div class="" style="font-size: 130%">Débit d'eau</div>
+                <div class="" style="font-size: 200%">{{lastDebitValue}}</div>
+            </b-col>
+        </b-row>
+
+        <b-row align-v="center" class="text-center">
+            <b-col>
+                <div class="mb-4" style="font-size: 130%">Niveau de batterie</div>
+                <img src="../assets/svg/battery.svg" class="my-auto" style="max-width: 50%"/>
+            </b-col>
+            <b-col cols="8">
+                <StockChart :data="series_battery"/>
+            </b-col>
+            <b-col>
+                <div class="" style="font-size: 130%">Niveau de batterie</div>
+                <div class="" style="font-size: 200%">{{lastBatteryValue/1000}}</div>
+            </b-col>
+        </b-row>
     </div>
 </template>
 
@@ -29,6 +67,7 @@
             this.sensorText = this.sensorName;
             this.loadDebitData();
             this.loadPressureData();
+            this.loadBatteryData();
         },
         methods : {
             loadPressureData: function() {
@@ -41,6 +80,7 @@
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
+                        this.lastPressureValue = arr[arr.length-1]['value_bar'];
                         return Object.assign({}, {
                             name: "Pression",
                             turboThreshold:60000,
@@ -65,17 +105,42 @@
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
+                        this.lastDebitValue = arr[arr.length-1]['value_m3h'];
                         return Object.assign({}, {
                             name: "Débit",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,
-                                y: obj.DistanceComputed
+                                y: obj.value_m3h
                             }))
                         });
                     });
                     //console.log(mutatedArray);
                     this.series_debit = mutatedArray;
+                    //console.log(this.series);
+                }).catch(error => console.log(error))
+            },
+            loadBatteryData: function() {
+                let query_str = 'SELECT "value_vBat" FROM ';
+                query_str += "\""+ this.sensorText+ "\"";
+                query_str += ' WHERE time >= now()-365d fill(null)';
+                Promise.all([
+                    client.query(query_str),
+                ]).then(parsedRes => {
+                    console.log(parsedRes);
+                    const mutatedArray = parsedRes.map( arr => {
+                        this.lastBatteryValue = arr[arr.length-1]['value_vBat'];
+                        return Object.assign({}, {
+                            name: "Débit",
+                            turboThreshold:60000,
+                            data: arr.map( obj => Object.assign({}, {
+                                x: (moment(obj.time).unix())*1000,
+                                y: obj.value_vBat
+                            }))
+                        });
+                    });
+                    //console.log(mutatedArray);
+                    this.series_battery = mutatedArray;
                     //console.log(this.series);
                 }).catch(error => console.log(error))
             }
@@ -94,7 +159,16 @@
                     data: [],
 
                 }],
+                series_battery : [{
+                    name: "Batterie",
+                    turboThreshold:60000,
+                    data: [],
+
+                }],
                 sensorText : "",
+                lastPressureValue:"",
+                lastDebitValue:"",
+                lastBatteryValue:""
             }
         },
         watch :{
@@ -102,6 +176,7 @@
                 this.sensorText = newValue;
                 this.loadDebitData();
                 this.loadPressureData();
+                this.loadBatteryData();
             }
         }
 

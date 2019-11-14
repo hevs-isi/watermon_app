@@ -25,11 +25,10 @@
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content">Mesures d'humidité</template>
-                            <b-dropdown-item :to="{ name: 'humidity', params: {id: 32 } }">Terrain Sauthier Sébastien Vollège</b-dropdown-item>
+                            <b-dropdown-item :to="{ name: 'humidity', params: {id: 32 } }">Terrain M. S Vollège</b-dropdown-item>
                         </b-nav-item-dropdown>
 
                     </b-navbar-nav>
-
                     <!-- Right aligned nav items -->
                     <b-navbar-nav class="ml-auto">
                         <b-nav-item-dropdown>
