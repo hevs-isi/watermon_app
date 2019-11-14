@@ -94,7 +94,7 @@
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
-                        this.lastPressureValue = arr[arr.length-1]['value_bar'];
+                        this.lastPressureValue = arr[arr.length-1]['value_bar'].toFixed(2);
                         return Object.assign({}, {
                             name: "Pression",
                             turboThreshold:60000,
@@ -119,7 +119,7 @@
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
-                        this.lastDebitValue = arr[arr.length-1]['value_m3h'];
+                        this.lastDebitValue = arr[arr.length-1]['value_m3h'].toFixed(2);
                         return Object.assign({}, {
                             name: "Débit",
                             turboThreshold:60000,
@@ -143,7 +143,7 @@
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
-                        this.lastBatteryValue = arr[arr.length-1]['value_vBat'];
+                        this.lastBatteryValue = arr[arr.length-1]['value_vBat'].toFixed(2);
                         return Object.assign({}, {
                             name: "Débit",
                             turboThreshold:60000,
