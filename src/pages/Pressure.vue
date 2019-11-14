@@ -12,7 +12,7 @@
             </b-col>
             <b-col sm="2">
                 <div class="" style="font-size: 130%">Pression d'eau</div>
-                <div class="" style="font-size: 200%">{{lastPressureValue}}</div>
+                <div class="" style="font-size: 200%">{{lastPressureValue}} bar</div>
             </b-col>
         </b-row>
 
@@ -26,7 +26,7 @@
             </b-col>
             <b-col>
                 <div class="" style="font-size: 130%">Débit d'eau</div>
-                <div class="" style="font-size: 200%">{{lastDebitValue}}</div>
+                <div class="" style="font-size: 200%">{{lastDebitValue}} m3h</div>
             </b-col>
         </b-row>
 
@@ -40,7 +40,7 @@
             </b-col>
             <b-col>
                 <div class="" style="font-size: 130%">Niveau de batterie</div>
-                <div class="" style="font-size: 200%">{{lastBatteryValue/1000}}</div>
+                <div class="" style="font-size: 200%">{{lastBatteryValue/1000}} V</div>
             </b-col>
         </b-row>
     </div>
@@ -65,6 +65,20 @@
         mounted (){
             console.log("mounted");
             this.sensorText = this.sensorName;
+            if (this.sensorText === undefined){
+                console.log("sensortext is undefiend");
+                console.log(this.sectorName);
+                if (this.sectorName.localeCompare('Ancienne STEP')===0){
+                    this.sensorText = 'measure-v0'
+                }
+                if (this.sectorName.localeCompare('Combaynon')===0){
+                    this.sensorText = 'measure-v2'
+                }
+                if (this.sectorName.localeCompare('Le Tarpin')===0){
+                    this.sensorText = 'measure-v4'
+                }
+            }
+            console.log(this.sensorText);
             this.loadDebitData();
             this.loadPressureData();
             this.loadBatteryData();
@@ -177,7 +191,8 @@
                 this.loadDebitData();
                 this.loadPressureData();
                 this.loadBatteryData();
-            }
+            },
+
         }
 
 
