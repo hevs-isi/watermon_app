@@ -1,7 +1,9 @@
 <template>
     <div class="level">
         <button v-on:click="changeData">Charger data</button>
+        <img src="../assets/svg/battery.svg" style="max-width: 10%"/>
         <StockChart :data="series" :title="title"/>
+
     </div>
 </template>
 
