@@ -12,6 +12,8 @@ import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css';
 
 library.add(faUserSecret)
 
@@ -22,6 +24,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(HighchartsVue)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = true
+Vue.use(NProgress)
 
 
 /* eslint-disable no-new */

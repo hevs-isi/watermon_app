@@ -49,6 +49,7 @@
 <script>
     import Influx from 'influx'
     import moment from 'moment'
+    import NProgress from 'nprogress'
     import StockChart from '../components/StockChart.vue'
     const client = new Influx.InfluxDB({
         database: 'Altis_DB',
@@ -69,6 +70,7 @@
             StockChart,
         },
         mounted () {
+            NProgress.start();
             this.loadHumidityData();
             this.loadTemperatureData();
             this.loadBatteryData();
@@ -92,6 +94,7 @@
                     });
                     //console.log(mutatedArray);
                     this.series_humidity = mutatedArray;
+                    NProgress.done();
                     //console.log(this.series);
                 }).catch(error => console.log(error))
             },
@@ -137,6 +140,7 @@
                     //console.log(this.series_battery);
                 }).catch(error => console.log(error))
             }
+
         },
         data () {
             return {

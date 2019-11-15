@@ -6,8 +6,7 @@ import humidity from '../pages/Humidity'
 import pressure from '../pages/Pressure'
 
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
@@ -31,5 +30,8 @@ export default new Router({
             props: true,
             component: pressure
         }
-    ]
+    ],
+
 })
+
+export default router

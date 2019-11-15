@@ -49,6 +49,7 @@
 <script>
     import Influx from 'influx'
     import moment from 'moment'
+    import NProgress from 'nprogress'
     import StockChart from '../components/StockChart.vue'
     const client = new Influx.InfluxDB({
         database: 'Altis_DB',
@@ -70,7 +71,8 @@
             StockChart
         },
         mounted (){
-            console.log("mounted");
+            NProgress.start();
+            console.log("start mount");
             this.sensorText = this.sensorName;
             if (this.sensorText === undefined){
                 console.log("sensortext is undefiend");
@@ -86,12 +88,14 @@
                 }
             }
             console.log(this.sensorText);
-            this.loadDebitData();
             this.loadPressureData();
+            this.loadDebitData();
             this.loadBatteryData();
+
         },
         methods : {
             loadPressureData: function() {
+
                 let query_str = 'SELECT "value_bar" FROM ';
                 query_str += "\""+ this.sensorText+ "\"";
                 query_str += ' WHERE time >= now()-365d fill(null)';
@@ -109,11 +113,15 @@
                                 x: (moment(obj.time).unix())*1000,
                                 y: obj.value_bar
                             }))
+
                         });
+
                     });
+
                     console.log(mutatedArray);
                     this.series_pressure = mutatedArray;
                     console.log(this.series);
+
                 }).catch(error => console.log(error))
             },
 
@@ -138,6 +146,7 @@
                     });
                     //console.log(mutatedArray);
                     this.series_debit = mutatedArray;
+                    NProgress.done();
                     //console.log(this.series);
                 }).catch(error => console.log(error))
             },
@@ -148,6 +157,7 @@
                 Promise.all([
                     client.query(query_str),
                 ]).then(parsedRes => {
+                    NProgress.set(0.65);
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastBatteryValue = arr[arr.length-1]['value_vBat'].toFixed(2);
@@ -164,6 +174,7 @@
                     this.series_battery = mutatedArray;
                     //console.log(this.series);
                 }).catch(error => console.log(error))
+
             }
         },
         data () {
@@ -195,8 +206,8 @@
         watch :{
             sensorName (newValue){
                 this.sensorText = newValue;
-                this.loadDebitData();
                 this.loadPressureData();
+                this.loadDebitData();
                 this.loadBatteryData();
             },
 
