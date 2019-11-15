@@ -76,7 +76,7 @@
         methods : {
             loadHumidityData: function() {
                 Promise.all([
-                    client.query('SELECT "Volumetric water content" FROM "field-humidity-sensor-1" WHERE time>now()-365d'),
+                    client.query('SELECT "Volumetric water content" FROM "field-humidity-sensor-1" WHERE time>1567706400'),
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
@@ -97,7 +97,7 @@
             },
             loadTemperatureData: function() {
                 Promise.all([
-                    client.query('SELECT "Soil temperature" FROM "field-humidity-sensor-1" WHERE time>now()-365d'),
+                    client.query('SELECT "Soil temperature" FROM "field-humidity-sensor-1" WHERE time>1567706400'),
                 ]).then(parsedRes => {
                     console.log(parsedRes);
                     const mutatedArray = parsedRes.map( arr => {
@@ -118,7 +118,7 @@
             },
             loadBatteryData: function() {
                 Promise.all([
-                    client.query('SELECT "Battery voltage" FROM "field-humidity-sensor-1" WHERE time>now()-365d'),
+                    client.query('SELECT "Battery voltage" FROM "field-humidity-sensor-1" WHERE time>1567706400'),
                 ]).then(parsedRes => {
 
                     const mutatedArray = parsedRes.map( arr => {
