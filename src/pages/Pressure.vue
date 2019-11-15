@@ -50,7 +50,14 @@
     import Influx from 'influx'
     import moment from 'moment'
     import StockChart from '../components/StockChart.vue'
-    const client = new Influx.InfluxDB('http://cesar:password@localhost:8086/Altis_DB');
+    const client = new Influx.InfluxDB({
+        database: 'Altis_DB',
+        host: 'influx.watermon.ch',
+        port: '443',
+        protocol: 'https',
+        username: 'ro',
+        password: 'ro'
+    });
 
     export default {
         props : [
