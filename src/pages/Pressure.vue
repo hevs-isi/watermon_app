@@ -162,7 +162,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastBatteryValue = arr[arr.length-1]['value_vBat'].toFixed(2);
                         return Object.assign({}, {
-                            name: "Débit",
+                            name: "Niveau de batterie",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,

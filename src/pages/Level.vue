@@ -69,7 +69,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastLevelValue = arr[arr.length-1]['DistanceComputed'];
                         return Object.assign({}, {
-                            name: "level-sensor-1",
+                            name: "Distance",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,
@@ -91,7 +91,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastBatteryValue = arr[arr.length-1]['Battery voltage'];
                         return Object.assign({}, {
-                            name: "level-sensor-1",
+                            name: "Niveau de batterie",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,

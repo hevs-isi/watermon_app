@@ -84,7 +84,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastHumidityValue = arr[arr.length-1]['Volumetric water content'].toFixed(2);
                         return Object.assign({}, {
-                            name: "field-humidity-sensor-1",
+                            name: "Volumetric water content",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,
@@ -106,7 +106,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastTemperatureValue = arr[arr.length-1]['Soil temperature'].toFixed(2);
                         return Object.assign({}, {
-                            name: "field-humidity-sensor    -1",
+                            name: "Température du sol",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,
@@ -127,7 +127,7 @@
                     const mutatedArray = parsedRes.map( arr => {
                         this.lastBatteryValue = arr[arr.length-1]['Battery voltage'].toFixed(2);
                         return Object.assign({}, {
-                            name: "level-sensor-1",
+                            name: "Niveau de batterie",
                             turboThreshold:60000,
                             data: arr.map( obj => Object.assign({}, {
                                 x: (moment(obj.time).unix())*1000,
