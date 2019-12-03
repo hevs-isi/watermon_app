@@ -26,7 +26,6 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = true
 Vue.use(NProgress)
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

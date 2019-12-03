@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+
         <l-map
                 class="m-auto"
                 style="height: 800px; width: 1600px"
@@ -13,11 +14,11 @@
 
             <l-tile-layer :url="url"></l-tile-layer>
             <!--<l-marker :lat-lng="marker"></l-marker>-->
-            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index" @click="loadData(sensor.id)">
+            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index" @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true" >
                 <l-popup>
                     <div v-if="sensor.type===1">
                         <h4>{{sensor.position_name}}</h4>
-                        <div>Pression : {{sensor.pressure}} bar     </div>
+                        <div>Pression : {{sensor.pressure}} bar         </div>
                         <div>Débit : {{sensor.debit}} m3h     </div>
                         <div>Niveau : {{sensor.level}} mm     </div>
                     </div>
@@ -28,15 +29,21 @@
                     </div>
                 </l-popup>
             </l-marker>
+            <l-marker v-for="(antenna,index) in antennas" :lat-lng="antenna.position" :key="index" @click="loadData(antenna.id)" :icon="antenna.icon" :visible="true" >
+                <l-popup>
+                    <h4>{{antenna.position_name}}</h4>
+                </l-popup>
+            </l-marker>
         </l-map>
     </div>
 
 </template>
 <script>
     import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
-    import { Icon } from 'leaflet'
-    delete Icon.Default.prototype._getIconUrl;
     import Influx from 'influx'
+    import { Icon } from 'leaflet'
+    import L from 'leaflet'
+    delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
         database: 'Altis_DB',
         host: 'influx.watermon.ch',
@@ -45,12 +52,13 @@
         username: 'ro',
         password: 'ro'
     });
-
     Icon.Default.mergeOptions({
         iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
         iconUrl: require('leaflet/dist/images/marker-icon.png'),
         shadowUrl: require('leaflet/dist/images/marker-shadow.png')
     });
+
+
     export default {
         name: 'home',
         components: {
@@ -60,7 +68,7 @@
         data() {
             return {
                 url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-                zoom: 14,
+                zoom: 13,
                 center: [46.09019806912501, 7.204499244689942],
                 bounds: null,
                 markers: [
@@ -75,7 +83,8 @@
                     pressure:"-",
                     debit:"-",
                     level:"-",
-                    position: [46.096717, 7.214058]
+                    position: [46.096717, 7.214058],
+                    icon: this.deviceIcon()
                 },{
                     type:1,
                     id:2,
@@ -83,7 +92,8 @@
                     pressure:"-",
                     debit:"-",
                     level:"none",
-                    position: [46.093547, 7.212366]
+                    position: [46.093547, 7.212366],
+                    icon: this.deviceIcon()
                 },{
                     type:1,
                     id:3,
@@ -91,16 +101,57 @@
                     pressure:"-",
                     debit:"-",
                     level:"none",
-                    position: [46.098088, 7.213919]
+                    position: [46.098088, 7.213919],
+                    icon: this.deviceIcon()
                 },{
                     type:2,
                     id:4,
                     position_name: 'Terrain M. S',
                     temp:"- °C",
                     humidity:"- %",
-                    position: [46.086570, 7.179780]
-                }]
+                    position: [46.086570, 7.179780],
+                    icon: this.deviceIcon()
+                }],
+                antennas: [{
+                    type: 1,
+                    id:1,
+                    position_name: 'STEP',
+                    pressure:"-",
+                    debit:"-",
+                    level:"-",
+                    position: [46.08302000, 7.20260000],
+                    icon: this.antennaIcon()
+                },{
+                    type:1,
+                    id:2,
+                    position_name: 'Ruinettes',
+                    pressure:"-",
+                    debit:"-",
+                    level:"none",
+                    position: [46.09072000, 7.25180000],
+                    icon: this.antennaIcon()
+                },{
+                    type:1,
+                    id:3,
+                    position_name: 'Réservoir Bruson',
+                    pressure:"-",
+                    debit:"-",
+                    level:"none",
+                    position: [46.06059000, 7.19409000],
+                    icon: this.antennaIcon()
+                },{
+                    type:1,
+                    id:4,
+                    position_name: 'Curala',
+                    pressure:"-",
+                    debit:"-",
+                    level:"none",
+                    position: [46.078594, 7.214584],
+                    icon: this.antennaIcon()
+        }]
             }
+        },
+        mounted(){
         },
         methods: {
             zoomUpdated (zoom) {
@@ -146,7 +197,24 @@
             },
             printPosition(event){
                 console.log(event.latlng);
+            },
+            deviceIcon(){
+                return L.icon({
+                    iconUrl: require('../assets/gps.png'),
+                    iconSize:     [32, 32],
+                    iconAnchor:   [20, 30],
+                    popupAnchor:  [-3, -76]
+                })
+            },
+            antennaIcon(){
+                return L.icon({
+                    iconUrl: require('../assets/antenna.png'),
+                    iconSize:     [64, 64],
+                    iconAnchor:   [0, 0],
+                    popupAnchor:  [-3, -76]
+                })
             }
+
         },
     }
 </script>

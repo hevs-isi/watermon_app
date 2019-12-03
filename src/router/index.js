@@ -5,6 +5,7 @@ import home from '../pages/Home'
 import level from '../pages/Level'
 import humidity from '../pages/Humidity'
 import pressure from '../pages/Pressure'
+import dev from '../pages/Dev'
 
 Vue.use(Router)
 const router = new Router({
@@ -30,6 +31,12 @@ const router = new Router({
             name: 'pressure',
             props: true,
             component: pressure
+        },
+        {
+            path: '/dev/',
+            name: 'dev',
+            props: true,
+            component: dev
         }
     ],
 
