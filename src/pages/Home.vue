@@ -276,7 +276,7 @@
             checkAntenna(){
                 let axiosArray = [];
                 for(let i =0; i< this.antennas.length; i++){
-                    axiosArray.push(axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+this.antennas[i].eui), {
+                    axiosArray.push(axios('https://watermon.ch/nodered/cors?eui='+this.antennas[i].eui), {
                         method: 'GET', // *GET, POST, PUT, DELETE, etc.
                         mode: 'origin', // no-cors, *cors, same-origin
                         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
