@@ -72,6 +72,7 @@
         },
         data() {
             return {
+                timer:'',
                 url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
                 zoom: 13,
                 center: [46.09019806912501, 7.204499244689942],
@@ -121,9 +122,6 @@
                     type: 1,
                     id:1,
                     position_name: 'STEP',
-                    pressure:"-",
-                    debit:"-",
-                    level:"-",
                     position: [46.08302000, 7.20260000],
                     icon: this.antennaIconDown(),
                     eui:'eui-fcc23dfffe0f0c22',
@@ -132,9 +130,6 @@
                     type:1,
                     id:2,
                     position_name: 'Ruinettes',
-                    pressure:"-",
-                    debit:"-",
-                    level:"none",
                     position: [46.09072000, 7.25180000],
                     icon: this.antennaIconDown(),
                     eui:'eui-fcc23dfffe0f0c7b',
@@ -143,9 +138,6 @@
                     type:1,
                     id:3,
                     position_name: 'Bruson',
-                    pressure:"-",
-                    debit:"-",
-                    level:"none",
                     position: [46.06059000, 7.19409000],
                     icon: this.antennaIconDown(),
                     eui:'eui-fcc23dfffe106166',
@@ -154,19 +146,27 @@
                     type:1,
                     id:4,
                     position_name: 'Curala',
-                    pressure:"-",
-                    debit:"-",
-                    level:"none",
                     position: [46.078594, 7.214584],
                     icon: this.antennaIconDown(),
                     eui:'eui-fcc23dfffe0aaac6',
                     lastSeen:""
-        }],
+                },{
+                    type:1,
+                    id:5,
+                    position_name: 'HEVs',
+                    position: [46.24046242, 7.35863492],
+                    icon: this.antennaIconDown(),
+                    eui:'eui-fcc23dfffe110106',
+                    lastSeen:""
+                }],
                 response:"",
             }
         },
+        created () {
+            this.timer = setInterval(this.checkAntenna, 30000)
+        },
         mounted(){
-            this.initAntenna();
+            this.checkAntenna();
         },
         methods: {
             zoomUpdated (zoom) {
@@ -261,7 +261,7 @@
 
 
             },
-            initAntenna(){
+            checkAntenna(){
                 let axiosArray = [];
                 for(let i =0; i< this.antennas.length; i++){
                     axiosArray.push(axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+this.antennas[i].eui));
