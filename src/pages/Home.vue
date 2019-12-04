@@ -14,7 +14,7 @@
 
             <l-tile-layer :url="url"></l-tile-layer>
             <!--<l-marker :lat-lng="marker"></l-marker>-->
-            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index" @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true" >
+            <l-marker v-for="(sensor) in sensors" :lat-lng="sensor.position" :key="sensor" @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true" >
                 <l-popup>
                     <div v-if="sensor.type===1">
                         <h4>{{sensor.position_name}}</h4>
@@ -29,9 +29,12 @@
                     </div>
                 </l-popup>
             </l-marker>
-            <l-marker v-for="(antenna,index) in antennas" :lat-lng="antenna.position" :key="index" @click="loadData(antenna.id)" :icon="antenna.icon" :visible="true" >
+            <l-marker v-for="(antenna) in antennas" :lat-lng="antenna.position" :key="antenna" @click="lastSeenAntenna(antenna.eui, antenna.id)" :icon="antenna.icon" :visible="true" >
                 <l-popup>
-                    <h4>{{antenna.position_name}}</h4>
+                    <h5>Antenne de {{antenna.position_name}}</h5>
+                    <div>latitude: {{antenna.position[0]}}</div>
+                    <div>longitude: {{antenna.position[1]}}</div>
+                    <div>Vu il y a : {{antenna.lastSeen}} secondes</div>
                 </l-popup>
             </l-marker>
         </l-map>
@@ -43,6 +46,8 @@
     import Influx from 'influx'
     import { Icon } from 'leaflet'
     import L from 'leaflet'
+    import axios from 'axios'
+
     delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
         database: 'Altis_DB',
@@ -120,7 +125,9 @@
                     debit:"-",
                     level:"-",
                     position: [46.08302000, 7.20260000],
-                    icon: this.antennaIcon()
+                    icon: this.antennaIconDown(),
+                    eui:'eui-fcc23dfffe0f0c22',
+                    lastSeen:""
                 },{
                     type:1,
                     id:2,
@@ -129,16 +136,20 @@
                     debit:"-",
                     level:"none",
                     position: [46.09072000, 7.25180000],
-                    icon: this.antennaIcon()
+                    icon: this.antennaIconDown(),
+                    eui:'eui-fcc23dfffe0f0c7b',
+                    lastSeen:""
                 },{
                     type:1,
                     id:3,
-                    position_name: 'Réservoir Bruson',
+                    position_name: 'Bruson',
                     pressure:"-",
                     debit:"-",
                     level:"none",
                     position: [46.06059000, 7.19409000],
-                    icon: this.antennaIcon()
+                    icon: this.antennaIconDown(),
+                    eui:'eui-fcc23dfffe106166',
+                    lastSeen:""
                 },{
                     type:1,
                     id:4,
@@ -147,11 +158,15 @@
                     debit:"-",
                     level:"none",
                     position: [46.078594, 7.214584],
-                    icon: this.antennaIcon()
-        }]
+                    icon: this.antennaIconDown(),
+                    eui:'eui-fcc23dfffe0aaac6',
+                    lastSeen:""
+        }],
+                response:"",
             }
         },
         mounted(){
+            this.initAntenna();
         },
         methods: {
             zoomUpdated (zoom) {
@@ -206,13 +221,67 @@
                     popupAnchor:  [-3, -76]
                 })
             },
-            antennaIcon(){
+            antennaIconUp(){
                 return L.icon({
-                    iconUrl: require('../assets/antenna.png'),
+                    iconUrl: require('../assets/antennaUp.png'),
                     iconSize:     [64, 64],
                     iconAnchor:   [0, 0],
-                    popupAnchor:  [-3, -76]
+                    popupAnchor:  [32, 0]
                 })
+            },
+            antennaIconDown(){
+                return L.icon({
+                    iconUrl: require('../assets/antennaDown.png'),
+                    iconSize:     [64, 64],
+                    iconAnchor:   [0, 0],
+                    popupAnchor:  [32, 0]
+                })
+            },
+                lastSeenAntenna(eui,id){
+                    axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+eui, {
+                        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                        mode: 'origin', // no-cors, *cors, same-origin
+                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    }).then((response) => {
+                        let now = new Date();
+                        console.log(now);
+                        let current_datetime = new Date(response.data.timestamp);
+                        let diffTime = (Math.abs(now-current_datetime)/1000);
+
+                        let formatedDate = Math.ceil(diffTime);
+                        this.antennas[id-1].lastSeen = formatedDate;
+
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+
+
+            },
+            initAntenna(){
+                let axiosArray = [];
+                for(let i =0; i< this.antennas.length; i++){
+                    axiosArray.push(axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+this.antennas[i].eui));
+                }
+                axios.all(axiosArray)
+                    .then(axios.spread((...responses)=> {
+                        responses.forEach((res,index) => {
+                            let timestamp = new Date(res.data.timestamp);
+                            let now = new Date();
+                            if (this.secondBetweenDate(now,timestamp)< 60){
+                                this.antennas[index].icon = this.antennaIconUp();
+                            }else {
+                                this.antennas[index].icon = this.antennaIconDown();
+                            }
+                        })
+                    }))
+
+            },
+            secondBetweenDate(date1, date2){
+                return Math.ceil(Math.abs(date1-date2)/1000);
             }
 
         },
