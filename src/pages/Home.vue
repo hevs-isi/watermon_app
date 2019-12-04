@@ -14,7 +14,7 @@
 
             <l-tile-layer :url="url"></l-tile-layer>
             <!--<l-marker :lat-lng="marker"></l-marker>-->
-            <l-marker v-for="(sensor) in sensors" :lat-lng="sensor.position" :key="sensor" @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true" >
+            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index + 10" @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true" >
                 <l-popup>
                     <div v-if="sensor.type===1">
                         <h4>{{sensor.position_name}}</h4>
@@ -29,7 +29,7 @@
                     </div>
                 </l-popup>
             </l-marker>
-            <l-marker v-for="(antenna) in antennas" :lat-lng="antenna.position" :key="antenna" @click="lastSeenAntenna(antenna.eui, antenna.id)" :icon="antenna.icon" :visible="true" >
+            <l-marker v-for="(antenna,index) in antennas" :lat-lng="antenna.position" :key="index + 100" @click="lastSeenAntenna(antenna.eui, antenna.id)" :icon="antenna.icon" :visible="true" >
                 <l-popup>
                     <h5>Antenne de {{antenna.position_name}}</h5>
                     <div>latitude: {{antenna.position[0]}}</div>
@@ -110,8 +110,17 @@
                     position: [46.098088, 7.213919],
                     icon: this.deviceIcon()
                 },{
-                    type:2,
+                    type:1,
                     id:4,
+                    position_name: 'Réservoir Curala',
+                    pressure:"-",
+                    debit:"-",
+                    level:"none",
+                    position: [46.079062, 7.215399],
+                    icon: this.deviceIcon()
+                },{
+                    type:2,
+                    id:5,
                     position_name: 'Terrain M. S',
                     temp:"- °C",
                     humidity:"- %",
@@ -201,11 +210,15 @@
                             .then(parsedRes => {console.log(parsedRes);this.sensors[2].debit = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
                         break;
                     case 4:
+                        Promise.all([client.query('SELECT last("Distance") FROM "level-sensor-5"'),])
+                            .then(parsedRes => {console.log(parsedRes);this.sensors[3].level = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
+                        break;
+                    case 5:
 
                         Promise.all([client.query('SELECT last("Soil temperature") FROM "field-humidity-sensor-1"'),])
-                            .then(parsedRes => {console.log(parsedRes);this.sensors[3].temp = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
+                            .then(parsedRes => {console.log(parsedRes);this.sensors[4].temp = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
                         Promise.all([client.query('SELECT last("Volumetric water content") FROM "field-humidity-sensor-1"'),])
-                            .then(parsedRes => {console.log(parsedRes);this.sensors[3].humidity = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
+                            .then(parsedRes => {console.log(parsedRes);this.sensors[4].humidity = parsedRes[0][0].last.toFixed(2);}).catch(error => console.log(error));
                         break;
 
                 }
@@ -217,7 +230,7 @@
                 return L.icon({
                     iconUrl: require('../assets/gps.png'),
                     iconSize:     [32, 32],
-                    iconAnchor:   [20, 30],
+                    iconAnchor:   [16, 32],
                     popupAnchor:  [-3, -76]
                 })
             },
@@ -225,7 +238,7 @@
                 return L.icon({
                     iconUrl: require('../assets/antennaUp.png'),
                     iconSize:     [64, 64],
-                    iconAnchor:   [0, 0],
+                    iconAnchor:   [32, 32],
                     popupAnchor:  [32, 0]
                 })
             },
@@ -233,12 +246,37 @@
                 return L.icon({
                     iconUrl: require('../assets/antennaDown.png'),
                     iconSize:     [64, 64],
-                    iconAnchor:   [0, 0],
+                    iconAnchor:   [32, 32],
                     popupAnchor:  [32, 0]
                 })
             },
-                lastSeenAntenna(eui,id){
-                    axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+eui, {
+            lastSeenAntenna(eui,id){
+                axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+eui, {
+                    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                    mode: 'origin', // no-cors, *cors, same-origin
+                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }).then((response) => {
+                    let now = new Date();
+                    let current_datetime = new Date(response.data.timestamp);
+                    let diffTime = (Math.abs(now-current_datetime)/1000);
+
+                    let formatedDate = Math.ceil(diffTime);
+                    this.antennas[id-1].lastSeen = formatedDate;
+
+                }).catch((e) => {
+                    console.log(e);
+                });
+
+
+            },
+            checkAntenna(){
+                let axiosArray = [];
+                for(let i =0; i< this.antennas.length; i++){
+                    axiosArray.push(axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+this.antennas[i].eui), {
                         method: 'GET', // *GET, POST, PUT, DELETE, etc.
                         mode: 'origin', // no-cors, *cors, same-origin
                         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -246,25 +284,7 @@
                             'Content-Type': 'application/json'
                             // 'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                    }).then((response) => {
-                        let now = new Date();
-                        console.log(now);
-                        let current_datetime = new Date(response.data.timestamp);
-                        let diffTime = (Math.abs(now-current_datetime)/1000);
-
-                        let formatedDate = Math.ceil(diffTime);
-                        this.antennas[id-1].lastSeen = formatedDate;
-
-                    }).catch((e) => {
-                        console.log(e);
                     });
-
-
-            },
-            checkAntenna(){
-                let axiosArray = [];
-                for(let i =0; i< this.antennas.length; i++){
-                    axiosArray.push(axios('https://cors-anywhere.herokuapp.com/http://noc.thethingsnetwork.org:8085/api/v2/gateways/'+this.antennas[i].eui));
                 }
                 axios.all(axiosArray)
                     .then(axios.spread((...responses)=> {
