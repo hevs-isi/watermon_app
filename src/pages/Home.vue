@@ -44,17 +44,26 @@
                     </l-map>
                 </b-col>
                 <b-col lg="3">
+                    <b-card>
                     <div class="lucida">
                         <h1>Status antennes</h1>
-
                         <pre>Les tests sont réalisés chaque 30 secondes...</pre>
-
-                        <div v-for="(antenna, index) in antennas" :key="index+200">
-                            <blockquote>
-                                {{antenna.timestamp}}
-                            </blockquote>
+                        <div class="">
+                            <div v-for="(antenna, index) in antennas" :key="index+200">
+                                <div v-if="antenna.isUp" >
+                                <p class="text-left">> {{antenna.position_name}}</p>
+                                <pre class="text-left">     <span style="color: green">OK</span> </pre>
+                                </div>
+                                <div v-else >
+                                    <p class="text-left">
+                                        > Status {{antenna.position_name}}
+                                    </p>
+                                    <pre class="text-left">     <span style="color: red">DOWN</span> depuis {{antenna.timestamp}}</pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    </b-card>
                 </b-col>
             </b-row>
         </b-container>
@@ -155,7 +164,8 @@
                     icon: this.antennaIconDown(),
                     eui: 'eui-fcc23dfffe0f0c22',
                     lastSeen: "-",
-                    timeStamp:""
+                    timeStamp: "",
+                    isUp: false,
                 }, {
                     type: 1,
                     id: 2,
@@ -164,7 +174,8 @@
                     icon: this.antennaIconDown(),
                     eui: 'eui-fcc23dfffe0f0c7b',
                     lastSeen: "-",
-                    timeStamp:""
+                    timeStamp: "",
+                    isUp: false,
                 }, {
                     type: 1,
                     id: 3,
@@ -173,7 +184,8 @@
                     icon: this.antennaIconDown(),
                     eui: 'eui-fcc23dfffe106166',
                     lastSeen: "-",
-                    timeStamp:""
+                    timeStamp: "",
+                    isUp: false,
                 }, {
                     type: 1,
                     id: 4,
@@ -182,7 +194,8 @@
                     icon: this.antennaIconDown(),
                     eui: 'eui-fcc23dfffe0aaac6',
                     lastSeen: "-",
-                    timeStamp:""
+                    timeStamp: "",
+                    isUp: false,
                 }, {
                     type: 1,
                     id: 5,
@@ -191,7 +204,8 @@
                     icon: this.antennaIconDown(),
                     eui: 'eui-fcc23dfffe110106',
                     lastSeen: "-",
-                    timestamp:""
+                    timestamp: "",
+                    isUp: false,
                 }],
                 response: "",
             }
@@ -347,8 +361,10 @@
 
                         if (this.secondBetweenDate(now, timestamp) < 60) {
                             this.antennas[i].icon = this.antennaIconUp();
+                            this.antennas[i].isUp = true;
                         } else {
                             this.antennas[i].icon = this.antennaIconDown();
+                            this.antennas[i].isUp = false;
                         }
                     });
                 }
@@ -398,7 +414,7 @@
 
     .lucida p {
         font-family: "Lucida Console", "Lucida Sans Typewriter", monaco, "Bitstream Vera Sans Mono", monospace;
-        font-size: 14px;
+        font-size: 11px;
         font-style: normal;
         font-variant: normal;
         font-weight: 400;
@@ -421,5 +437,9 @@
         font-variant: normal;
         font-weight: 400;
         line-height: 23px;
+    }
+
+    .console {
+        background-color: #828ea0;
     }
 </style>
