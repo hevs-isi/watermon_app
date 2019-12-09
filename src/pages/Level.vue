@@ -11,7 +11,7 @@
             </b-col>
             <b-col sm="2">
                 <div class="" style="font-size: 130%">Niveau d'eau</div>
-                <div class="" style="font-size: 200%">{{lastLevelValue}}</div>
+                <div class="" style="font-size: 200%">{{lastLevelValue}} mm</div>
             </b-col>
         </b-row>
 
@@ -25,7 +25,7 @@
             </b-col>
             <b-col>
                 <div class="" style="font-size: 130%">Niveau de batterie</div>
-                <div class="" style="font-size: 200%">{{lastBatteryValue}}</div>
+                <div class="" style="font-size: 200%">{{lastBatteryValue}} V</div>
             </b-col>
         </b-row>
     </div>
