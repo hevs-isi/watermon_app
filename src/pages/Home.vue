@@ -61,10 +61,10 @@
                 </b-col>
                 </transition>
 
-                <b-button  @click="toggleStatus" style="background-color: white; margin-right: 1em"><img :src="arrow" class="my-auto" style="max-width: 100%;"/></b-button>
+                <b-button squared variant="outline-secondary" @click="toggleStatus" style="height: fit-content; align-self: center"><img :src="arrow" /></b-button>
                 <transition name="slide">
-                <b-col v-if="showStatus" cols="3">
-                    <b-card >
+                <b-col v-if="showStatus" cols="3" class="align-self-center">
+                    <b-card>
                         <div class="lucida">
                             <h1>Status antennes</h1>
                             <pre>Prochain test dans {{seconds}} secondes...</pre>
@@ -498,12 +498,13 @@
         text-align: left;
     }
     .slide-enter-active {
-        transition: all .2s ease;
+        transition: all .4s ease;
     }
     .slide-leave-active {
-        transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+
     }
     .slide-enter, .slide-leave-to {
+
         transform: translateX(100vh);
         opacity: 0;
     }
