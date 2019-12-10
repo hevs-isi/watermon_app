@@ -47,7 +47,7 @@
                     <b-card>
                     <div class="lucida">
                         <h1>Status antennes</h1>
-                        <pre>Les tests sont réalisés chaque 30 secondes...</pre>
+                        <pre>Prochain test dans {{seconds}} secondes...</pre>
                         <div class="">
                             <div v-for="(antenna, index) in antennas" :key="index+200">
                                 <div v-if="antenna.isUp" >
@@ -101,7 +101,9 @@
         },
         data() {
             return {
-                timer: '',
+                timer:null,
+                timerIsRunning:false,
+                seconds:0,
                 url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
                 zoom: 13,
                 center: [46.09019806912501, 7.204499244689942],
@@ -211,12 +213,38 @@
             }
         },
         created() {
-            this.timer = setInterval(this.checkAntenna, 30000)
+            this.checkAntenna();
+            this.startTimer();
         },
         mounted() {
-            this.checkAntenna();
+
+
+        },
+        //VERY VERY important !! Destroy the timer when the user change the page
+        beforeDestroy() {
+            clearInterval(this.timer);
         },
         methods: {
+            startTimer(){
+                if (!this.timerIsRunning){
+                    this.timerIsRunning = true;
+                    if (!this.timer){
+                        console.log("Start timer...")
+                        this.timer = setInterval(this.secondsCallback, 1000);
+                    }
+                }
+            },
+            secondsCallback(){
+                if (this.seconds < 30){
+                    console.log(this.seconds);
+                    this.seconds ++;
+                } else if (this.seconds === 30){
+                    console.log("check antennas");
+                    this.seconds = 0;
+                    this.checkAntenna();
+                }
+
+            },
             zoomUpdated(zoom) {
                 this.zoom = zoom;
             },
