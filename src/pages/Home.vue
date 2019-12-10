@@ -11,58 +11,73 @@
                             @update:center="centerUpdated"
                             @update:bounds="boundsUpdated"
                             @click="printPosition"
+                            class="leaflet-control-layers-list"
                     >
+                        <l-control-layers ref="control"
+                                          :sort-layers="true"
+                        />
+                        <l-tile-layer :url="url2" name="Carte" layer-type="base" />
+                        <l-tile-layer :url="url" name="Satellite" layer-type="base" />
 
-                        <l-tile-layer :url="url"></l-tile-layer>
-                        <!--<l-marker :lat-lng="marker"></l-marker>-->
-                        <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index + 10"
-                                  @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true">
-                            <l-popup>
-                                <div v-if="sensor.type===1">
-                                    <h4>{{sensor.position_name}}</h4>
-                                    <div>Pression : {{sensor.pressure}} bar</div>
-                                    <div>Débit : {{sensor.debit}} m3h</div>
-                                    <div>Niveau : {{sensor.level}} mm</div>
-                                </div>
-                                <div v-if="sensor.type===2">
-                                    <h4>{{sensor.position_name}}</h4>
-                                    <div>Humidité du sol : {{sensor.humidity*100}} %</div>
-                                    <div>Température du sol : {{sensor.temp}} °C</div>
-                                </div>
-                            </l-popup>
-                        </l-marker>
-                        <l-marker v-for="(antenna,index) in antennas" :lat-lng="antenna.position" :key="index + 100"
-                                  @click="lastSeenAntenna(antenna.eui, antenna.id)" :icon="antenna.icon"
-                                  :visible="true">
-                            <l-popup>
-                                <h5>Antenne de {{antenna.position_name}}</h5>
-                                <div>latitude: {{antenna.position[0]}}</div>
-                                <div>longitude: {{antenna.position[1]}}</div>
-                                <div>Vu il y a : {{antenna.lastSeen}} secondes</div>
-                            </l-popup>
-                        </l-marker>
+                        <l-layer-group
+                                layer-type="overlay"
+                                name="Capteurs"
+                                :visible="true"
+                                >
+                            <l-marker v-for="(sensor,index) in sensors" :lat-lng="sensor.position" :key="index + 10"
+                                      @click="loadData(sensor.id)" :icon="sensor.icon" :visible="true">
+                                <l-popup>
+                                    <div v-if="sensor.type===1">
+                                        <h4>{{sensor.position_name}}</h4>
+                                        <div>Pression : {{sensor.pressure}} bar</div>
+                                        <div>Débit : {{sensor.debit}} m3h</div>
+                                        <div>Niveau : {{sensor.level}} mm</div>
+                                    </div>
+                                    <div v-if="sensor.type===2">
+                                        <h4>{{sensor.position_name}}</h4>
+                                        <div>Humidité du sol : {{sensor.humidity*100}} %</div>
+                                        <div>Température du sol : {{sensor.temp}} °C</div>
+                                    </div>
+                                </l-popup>
+                            </l-marker>
+                        </l-layer-group>
+                        <l-layer-group
+                                layer-type="overlay"
+                                name="Antennes"
+                                :visible="true">
+                            <l-marker v-for="(antenna,index) in antennas" :lat-lng="antenna.position" :key="index + 100"
+                                      @click="lastSeenAntenna(antenna.eui, antenna.id)" :icon="antenna.icon"
+                                      :visible="true">
+                                <l-popup>
+                                    <h5>Antenne de {{antenna.position_name}}</h5>
+                                    <div>latitude: {{antenna.position[0]}}</div>
+                                    <div>longitude: {{antenna.position[1]}}</div>
+                                    <div>Vu il y a : {{antenna.lastSeen}} secondes</div>
+                                </l-popup>
+                            </l-marker>
+                        </l-layer-group>
                     </l-map>
                 </b-col>
                 <b-col lg="3">
                     <b-card>
-                    <div class="lucida">
-                        <h1>Status antennes</h1>
-                        <pre>Prochain test dans {{seconds}} secondes...</pre>
-                        <div class="">
-                            <div v-for="(antenna, index) in antennas" :key="index+200">
-                                <div v-if="antenna.isUp" >
-                                <p class="text-left">> {{antenna.position_name}}</p>
-                                <pre class="text-left">     <span style="color: green">OK</span> </pre>
-                                </div>
-                                <div v-else >
-                                    <p class="text-left">
-                                        > Status {{antenna.position_name}}
-                                    </p>
-                                    <pre class="text-left">     <span style="color: red">DOWN</span> depuis {{antenna.timestamp}}</pre>
+                        <div class="lucida">
+                            <h1>Status antennes</h1>
+                            <pre>Prochain test dans {{seconds}} secondes...</pre>
+                            <div class="">
+                                <div v-for="(antenna, index) in antennas" :key="index+200">
+                                    <div v-if="antenna.isUp">
+                                        <p class="text-left">> {{antenna.position_name}}</p>
+                                        <pre class="text-left">     <span style="color: green">OK</span> </pre>
+                                    </div>
+                                    <div v-else>
+                                        <p class="text-left">
+                                            > Status {{antenna.position_name}}
+                                        </p>
+                                        <pre class="text-left">     <span style="color: red">DOWN</span> depuis {{antenna.timestamp}}</pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </b-card>
                 </b-col>
             </b-row>
@@ -71,7 +86,7 @@
 
 </template>
 <script>
-    import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
+    import {LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup} from 'vue2-leaflet'
     import Influx from 'influx'
     import {Icon} from 'leaflet'
     import L from 'leaflet'
@@ -96,15 +111,16 @@
     export default {
         name: 'home',
         components: {
-            LMap, LTileLayer, LMarker, LPopup
+            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup
 
         },
         data() {
             return {
-                timer:null,
-                timerIsRunning:false,
-                seconds:0,
-                url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                timer: null,
+                timerIsRunning: false,
+                seconds: 30,
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                url2: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
                 zoom: 13,
                 center: [46.09019806912501, 7.204499244689942],
                 bounds: null,
@@ -225,22 +241,19 @@
             clearInterval(this.timer);
         },
         methods: {
-            startTimer(){
-                if (!this.timerIsRunning){
+            startTimer() {
+                if (!this.timerIsRunning) {
                     this.timerIsRunning = true;
-                    if (!this.timer){
-                        console.log("Start timer...")
+                    if (!this.timer) {
                         this.timer = setInterval(this.secondsCallback, 1000);
                     }
                 }
             },
-            secondsCallback(){
-                if (this.seconds < 30){
-                    console.log(this.seconds);
-                    this.seconds ++;
-                } else if (this.seconds === 30){
-                    console.log("check antennas");
-                    this.seconds = 0;
+            secondsCallback() {
+                if (this.seconds < 31) {
+                    this.seconds--;
+                } else if (this.seconds === 0) {
+                    this.seconds = 30;
                     this.checkAntenna();
                 }
 
@@ -469,5 +482,14 @@
 
     .console {
         background-color: #828ea0;
+    }
+    .example-custom-control {
+        background: #fff;
+        padding: 0 0.5em;
+        border: 1px solid #aaa;
+        border-radius: 0.1em;
+    }
+    .leaflet-control-layers-list {
+        text-align: left;
     }
 </style>
