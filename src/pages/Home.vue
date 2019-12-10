@@ -2,7 +2,8 @@
     <div class="home">
         <b-container fluid class="mh-100">
             <b-row>
-                <b-col lg="9">
+                <transition name="slide">
+                <b-col>
                     <l-map
                             style="height: 850px;width: 100%"
                             :zoom="zoom"
@@ -58,8 +59,12 @@
                         </l-layer-group>
                     </l-map>
                 </b-col>
-                <b-col lg="3">
-                    <b-card>
+                </transition>
+
+                <b-button  @click="toggleStatus" style="background-color: white; margin-right: 1em"><img :src="arrow" class="my-auto" style="max-width: 100%;"/></b-button>
+                <transition name="slide">
+                <b-col v-if="showStatus" cols="3">
+                    <b-card >
                         <div class="lucida">
                             <h1>Status antennes</h1>
                             <pre>Prochain test dans {{seconds}} secondes...</pre>
@@ -80,6 +85,7 @@
                         </div>
                     </b-card>
                 </b-col>
+                </transition>
             </b-row>
         </b-container>
     </div>
@@ -111,11 +117,13 @@
     export default {
         name: 'home',
         components: {
-            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup
+            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup,
 
         },
         data() {
             return {
+                arrow: require('../assets/svg/left_arrow.svg'),
+                showStatus:false,
                 timer: null,
                 timerIsRunning: false,
                 seconds: 30,
@@ -241,6 +249,15 @@
             clearInterval(this.timer);
         },
         methods: {
+            toggleStatus(){
+                if (this.showStatus){
+                    this.arrow = require('../assets/svg/left_arrow.svg')
+                } else {
+                    this.arrow = require('../assets/svg/right_arrow.svg')
+                }
+
+                this.showStatus = !this.showStatus
+            },
             startTimer() {
                 if (!this.timerIsRunning) {
                     this.timerIsRunning = true;
@@ -250,11 +267,12 @@
                 }
             },
             secondsCallback() {
-                if (this.seconds < 31) {
-                    this.seconds--;
-                } else if (this.seconds === 0) {
+                if (this.seconds <= 0) {
                     this.seconds = 30;
                     this.checkAntenna();
+                }
+                else if (this.seconds < 31) {
+                    this.seconds--;
                 }
 
             },
@@ -384,9 +402,9 @@
 
             },
             checkAntenna() {
-                //let axiosArray = [];
+                console.log("Check status antennas");
                 for (let i = 0; i < this.antennas.length; i++) {
-                    console.log("Check status of : " + this.antennas[i].eui);
+
                     axios('https://watermon.ch/nodered/gateway?eui=' + this.antennas[i].eui, {
                         method: 'GET', // *GET, POST, PUT, DELETE, etc.
                         mode: 'origin', // no-cors, *cors, same-origin
@@ -409,19 +427,6 @@
                         }
                     });
                 }
-                /**axios.all(axiosArray)
-                 .then(axios.spread((...responses)=> {
-                        responses.forEach((res,index) => {
-                            console.log(index);
-                            let timestamp = new Date(res.data.timestamp);
-                            let now = new Date();
-                            if (this.secondBetweenDate(now,timestamp)< 60){
-                                this.antennas[index].icon = this.antennaIconUp();
-                            }else {
-                                this.antennas[index].icon = this.antennaIconDown();
-                            }
-                        })
-                    }))*/
 
             },
             secondBetweenDate(date1, date2) {
@@ -491,5 +496,15 @@
     }
     .leaflet-control-layers-list {
         text-align: left;
+    }
+    .slide-enter-active {
+        transition: all .2s ease;
+    }
+    .slide-leave-active {
+        transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-enter, .slide-leave-to {
+        transform: translateX(100vh);
+        opacity: 0;
     }
 </style>

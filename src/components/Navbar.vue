@@ -2,7 +2,15 @@
     <div>
         <b-navbar toggleable="lg" type="light" id="navbar">
                 <b-navbar-brand>
-                        <img class="" src="https://www.hevs.ch/img/logo-hes-so-valais-2019.png" height="60em" >
+                    <div>
+                        <img class="" src="https://www.hevs.ch/img/logo-hes-so-valais-2019.png" height="50em" >
+                        <img class="pl-4" src="../assets/logo_altis.png" height="50em">
+                    </div>
+                    <div>
+
+                    </div>
+
+
                 </b-navbar-brand>
             <b-container>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -54,6 +62,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     #navbar {
-        background-color: bisque;
+        background-color: #B8B8B8;
     }
 </style>
