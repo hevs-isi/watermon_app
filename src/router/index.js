@@ -6,6 +6,7 @@ import level from '../pages/Level'
 import humidity from '../pages/Humidity'
 import pressure from '../pages/Pressure'
 import dev from '../pages/Dev'
+import info from '../pages/Info'
 
 Vue.use(Router)
 const router = new Router({
@@ -14,6 +15,11 @@ const router = new Router({
             path: '/',
             name: 'home',
             component: home
+        },
+        {
+            path: '/info',
+            name: 'info',
+            component: info
         },
         {
             path: '/level',

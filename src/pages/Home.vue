@@ -61,7 +61,6 @@
                     </l-map>
                 </b-col>
                 </transition>
-
                 <b-button squared variant="outline-secondary" @click="toggleStatus" style="height: fit-content; align-self: center"><img :src="arrow" /></b-button>
                 <transition name="slide">
                 <b-col v-if="showStatus" cols="3" class="align-self-center">
