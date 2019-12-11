@@ -1,6 +1,14 @@
 <template>
   <div id="app">
+    <Snow
+            :active="checked"
+            zIndex="2"
+            :wind='10'
+            :swing='3'
+            speed="m"
+            color="#787878"/>
     <Navbar class="mb-3"/>
+
     <transition
             name="fade"
             mode="out-in"
@@ -12,12 +20,30 @@
 
 <script>
   import Navbar from './components/Navbar.vue'
+  import Snow from 'vue-niege';
+  import {serverBus} from "../src/main";
   export default {
     name: 'App',
     components: {
       Navbar,
+      Snow
+
 
     },
+    data(){
+      return{
+        checked: true,
+      }
+    },
+    methods :{
+
+    },
+    created() {
+      // Using the server bus to check an event
+      serverBus.$on('activeSnow', (checked) => {
+        this.checked = checked;
+      });
+    }
 
   }
 </script>
@@ -64,35 +90,3 @@
     opacity: 0
   }
 </style>
-
-/**
-query : function() {
-Promise.all([
-client.query('SELECT "DistanceComputed" FROM "level-sensor-1" WHERE time>now()-1d'),
-]).then(parsedRes => {
-console.log(parsedRes);
-const mutatedArray = parsedRes.map( arr => {
-return Object.assign({}, {
-name: "level-sensor-1",
-data: arr.map( obj => Object.assign({}, {
-x: (moment(obj.time).unix())*1000,
-y: obj.DistanceComputed
-}))
-});
-});
-console.log(mutatedArray);
-this.series = mutatedArray;
-console.log(this.series);
-return mutatedArray;
-}).catch(error => console.log(error))
-},
-*/
-
-methods : {
-changeData: function() {
-this.series = [{
-name: "level-sensor-1",
-data: [6,5,4,3,2,1]
-}]
-}
-},

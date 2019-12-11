@@ -26,6 +26,7 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = true
 Vue.use(NProgress);
 Vue.use(VueResource);
+export const serverBus = new Vue();
 
 /* eslint-disable no-new */
 new Vue({

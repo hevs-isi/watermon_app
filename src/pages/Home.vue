@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+
         <b-container fluid class="mh-100">
             <b-row>
                 <transition name="slide">
@@ -97,6 +98,7 @@
     import {Icon} from 'leaflet'
     import L from 'leaflet'
     import axios from 'axios'
+
 
     delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
