@@ -39,11 +39,12 @@
 
                     </b-navbar-nav>
                     <!-- Right aligned nav items -->
-                    <b-navbar-nav class="ml-auto">
+                    <b-navbar-nav class="m-auto">
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
-                            <template slot="button-content">User</template>
-                                <b-dropdown-item >Login</b-dropdown-item>
+                            <template slot="button-content" >User</template>
+                                <b-form-checkbox v-model="checked" @change="checkedChanged" class="text-left ml-3"> Snow </b-form-checkbox>
+                            <b-dropdown-item class="text-left ml-3">Login</b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
                 </b-collapse>
@@ -52,11 +53,21 @@
     </div>
 </template>
 <script>
+    import {serverBus} from "../main";
+
     export default {
         data() {
             return {
+                checked:true,
             }
+
         },
+        methods: {
+            checkedChanged (){
+                this.checked = !this.checked;
+                serverBus.$emit('activeSnow', this.checked);
+            }
+        }
     }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
