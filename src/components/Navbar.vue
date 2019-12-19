@@ -13,38 +13,38 @@
             <b-container>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav>
+                    <b-navbar-nav class="ml-auto">
                         <b-nav-item href="/#/info">
-                            Info
+                            INFO ET CONTACTS
                         </b-nav-item>
                         <b-nav-item href="/#/">
-                            Carte
+                            CARTE
                         </b-nav-item>
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
-                            <template slot="button-content">Mesures de niveau</template>
+                            <template slot="button-content">NIVEAU</template>
                             <b-dropdown-item to="/level">Ancienne STEP</b-dropdown-item>
                         </b-nav-item-dropdown>
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
-                            <template slot="button-content">Mesures de pression et de débit</template>
+                            <template slot="button-content">PRESSION ET DÉBIT</template>
                             <b-dropdown-item :to="{ name: 'pressure', params: {sensorName: 'measure-v2', sectorName: 'Combaynon' } }">Combaynon</b-dropdown-item>
                             <b-dropdown-item :to="{ name: 'pressure', params: {sensorName: 'measure-v0', sectorName: 'Ancienne STEP'  } }">Ancienne STEP</b-dropdown-item>
                             <b-dropdown-item :to="{ name: 'pressure', params: {sensorName: 'measure-v4', sectorName: 'Le Tarpin'  } }">Le Tarpin</b-dropdown-item>
                         </b-nav-item-dropdown>
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
-                            <template slot="button-content">Mesures d'humidité</template>
+                            <template slot="button-content">HUMIDITÉ</template>
                             <b-dropdown-item :to="{ name: 'humidity', params: {id: 32 } }">Terrain M. S Vollège</b-dropdown-item>
                         </b-nav-item-dropdown>
 
                     </b-navbar-nav>
                     <!-- Right aligned nav items -->
-                    <b-navbar-nav class="m-auto">
+                    <b-navbar-nav class="">
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
-                            <template slot="button-content" >User</template>
-                                <b-form-checkbox v-model="checked" @change="checkedChanged" class="text-left ml-3"> Snow </b-form-checkbox>
+                            <template slot="button-content" >USER</template>
+                                <!-- <b-form-checkbox v-model="checked" @change="checkedChanged" class="text-left ml-3"> Snow </b-form-checkbox>-->
                             <b-dropdown-item class="text-left ml-3">Login</b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
@@ -54,19 +54,19 @@
     </div>
 </template>
 <script>
-    import {serverBus} from "../main";
+    /** import {serverBus} from "../main";*/
 
     export default {
         data() {
             return {
-                checked:true,
+                checked:false,
             }
 
         },
         methods: {
             checkedChanged (){
                 this.checked = !this.checked;
-                serverBus.$emit('activeSnow', this.checked);
+                /** serverBus.$emit('activeSnow', this.checked);*/
             }
         }
     }
