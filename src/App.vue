@@ -21,7 +21,7 @@
 <script>
   import Navbar from './components/Navbar.vue'
   import Snow from 'vue-niege';
-  import {serverBus} from "../src/main";
+  /** import {serverBus} from "../src/main";*/
   export default {
     name: 'App',
     components: {
@@ -32,18 +32,33 @@
     },
     data(){
       return{
-        checked: true,
+        checked: false,
+        keysPressed: {}
       }
     },
     methods :{
-
+      add (event){
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['s'] && this.keysPressed['n'] && this.keysPressed['o'] && this.keysPressed['w']) {
+          this.checked = ! this.checked;
+        }
+      },
+      delete (event){
+        this.keysPressed[event.key] = false;
+      }
     },
     created() {
       // Using the server bus to check an event
-      serverBus.$on('activeSnow', (checked) => {
+      /**serverBus.$on('activeSnow', (checked) => {
         this.checked = checked;
+      });*/
+      window.addEventListener('keydown', (event) => {
+          this.add(event);
       });
-    }
+      window.addEventListener('keyup', (event) => {
+          this.delete(event);
+      });
+    },
 
   }
 </script>
