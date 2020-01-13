@@ -102,7 +102,7 @@
     delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
         database: 'Altis_DB',
-        host: 'influx.watermon.ch',
+        host: 'influx.dev.watermon.ch',
         port: '443',
         protocol: 'https',
         username: 'ro',
