@@ -97,16 +97,17 @@
     import {Icon} from 'leaflet'
     import L from 'leaflet'
     import axios from 'axios'
+    import credInflux from '../constants/influx'
 
 
     delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
-        database: 'Altis_DB',
-        host: 'influx.dev.watermon.ch',
-        port: '443',
-        protocol: 'https',
-        username: 'ro',
-        password: 'aeC4hohu'
+        database: credInflux.database,
+        host: credInflux.host,
+        port: credInflux.port,
+        protocol: credInflux.protocol,
+        username: credInflux.username,
+        password: credInflux.password
     });
     Icon.Default.mergeOptions({
         iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -380,7 +381,7 @@
                 })
             },
             lastSeenAntenna(eui, id) {
-                axios('https://watermon.ch/nodered/gateway?eui=' + eui, {
+                axios('https://nodered.watermon.ch/gateway?eui=' + eui, {
                     method: 'GET', // *GET, POST, PUT, DELETE, etc.
                     mode: 'origin', // no-cors, *cors, same-origin
                     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -406,7 +407,7 @@
                 console.log("Check status antennas");
                 for (let i = 0; i < this.antennas.length; i++) {
 
-                    axios('https://watermon.ch/nodered/gateway?eui=' + this.antennas[i].eui, {
+                    axios('https://nodered.watermon.ch/gateway?eui=' + this.antennas[i].eui, {
                         method: 'GET', // *GET, POST, PUT, DELETE, etc.
                         mode: 'origin', // no-cors, *cors, same-origin
                         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

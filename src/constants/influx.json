@@ -1,0 +1,8 @@
+{
+  "database": "Altis_DB",
+  "host": "influx.watermon.ch",
+  "port": "443",
+  "protocol": "https",
+  "username": "ro",
+  "password": "aeC4hohu"
+}

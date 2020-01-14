@@ -37,13 +37,14 @@
     import moment from 'moment'
     import NProgress from 'nprogress'
     import StockChart from '../components/StockChart.vue'
+    import credInflux from "../constants/influx";
     const client = new Influx.InfluxDB({
-        database: 'Altis_DB',
-        host: 'influx.dev.watermon.ch',
-        port: '443',
-        protocol: 'https',
-        username: 'ro',
-        password: 'aeC4hohu'
+        database: credInflux.database,
+        host: credInflux.host,
+        port: credInflux.port,
+        protocol: credInflux.protocol,
+        username: credInflux.username,
+        password: credInflux.password
     });
 
     export default {
