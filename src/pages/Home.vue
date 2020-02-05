@@ -14,13 +14,20 @@
                             @update:bounds="boundsUpdated"
                             @click="printPosition"
                             class="leaflet-control-layers-list"
+                            ref="myMap"
                     >
                         <l-control-layers ref="control"
                                           :sort-layers="true"
                         />
                         <l-tile-layer :url="url2" name="Carte" layer-type="base" />
                         <l-tile-layer :url="url" name="Satellite" layer-type="base" />
+                        <l-layer-group
+                                layer-type="overlay"
+                                name="KMZ"
+                                :visible="true"
+                        ref="layerGroupKMZ">
 
+                        </l-layer-group>
                         <l-layer-group
                                 layer-type="overlay"
                                 name="Capteurs"
@@ -57,6 +64,11 @@
                                     <div>Vu il y a : {{antenna.lastSeen}} secondes</div>
                                 </l-popup>
                             </l-marker>
+                            <l-circle
+                                    :lat-lng="circle.center"
+                                    :radius="circle.radius"
+                            />
+
                         </l-layer-group>
                     </l-map>
                 </b-col>
@@ -92,13 +104,12 @@
 
 </template>
 <script>
-    import {LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup} from 'vue2-leaflet'
+    import {LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup, LCircle} from 'vue2-leaflet'
     import Influx from 'influx'
     import {Icon} from 'leaflet'
     import L from 'leaflet'
     import axios from 'axios'
     import credInflux from '../constants/influx'
-
 
     delete Icon.Default.prototype._getIconUrl;
     const client = new Influx.InfluxDB({
@@ -119,12 +130,16 @@
     export default {
         name: 'home',
         components: {
-            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup,
+            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup, LCircle,
 
         },
         data() {
             return {
                 arrow: require('../assets/svg/left_arrow.svg'),
+                circle: {
+                    center: [46.08302000, 7.20260000],
+                    radius: 4500
+                },
                 showStatus:false,
                 timer: null,
                 timerIsRunning: false,
@@ -243,8 +258,6 @@
             this.startTimer();
         },
         mounted() {
-
-
         },
         //VERY VERY important !! Destroy the timer when the user change the page
         beforeDestroy() {
