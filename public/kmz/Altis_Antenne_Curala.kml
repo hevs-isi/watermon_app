@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="0204111052_Altis_Antenne_Curala_4326" id="0204111052_Altis_Antenne_Curala_4326">
+	<SimpleField name="altitudeMode" type="string"></SimpleField>
+	<SimpleField name="tessellate" type="int"></SimpleField>
+	<SimpleField name="extrude" type="int"></SimpleField>
+	<SimpleField name="visibility" type="int"></SimpleField>
+	<SimpleField name="icon" type="string"></SimpleField>
+	<SimpleField name="Climate" type="string"></SimpleField>
+	<SimpleField name="Tx Lat / Lon" type="string"></SimpleField>
+	<SimpleField name="ERP" type="string"></SimpleField>
+	<SimpleField name="Tx Antenna" type="string"></SimpleField>
+	<SimpleField name="Modulation" type="string"></SimpleField>
+	<SimpleField name="Terrain" type="string"></SimpleField>
+	<SimpleField name="RF model" type="string"></SimpleField>
+	<SimpleField name="Rx Gain" type="string"></SimpleField>
+	<SimpleField name="File id" type="string"></SimpleField>
+	<SimpleField name="Rx Height" type="string"></SimpleField>
+	<SimpleField name="Clutter" type="string"></SimpleField>
+	<SimpleField name="Frequency" type="string"></SimpleField>
+	<SimpleField name="EIRP" type="string"></SimpleField>
+	<SimpleField name="Radius" type="string"></SimpleField>
+	<SimpleField name="Coverage" type="string"></SimpleField>
+	<SimpleField name="Rx Sensitivity" type="string"></SimpleField>
+	<SimpleField name="Tx Height" type="string"></SimpleField>
+	<SimpleField name="Tx Gain" type="string"></SimpleField>
+	<SimpleField name="RF Power" type="string"></SimpleField>
+	<SimpleField name="Resolution" type="string"></SimpleField>
+</Schema>
+<Folder><name>0204111052_Altis_Antenne_Curala_4326</name>
+  <Placemark>
+	<name>868MHz 0.1W</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#0204111052_Altis_Antenne_Curala_4326">
+		<SimpleData name="visibility">-1</SimpleData>
+		<SimpleData name="icon">0204111052_Altis_Antenne_Curala.4326.png</SimpleData>
+	</SchemaData></ExtendedData>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>7.344497,46.2086 7.344497,45.9493 7.085203,45.9493 7.085203,46.2086 7.344497,46.2086</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+	<name>0204111052_Altis_Antenne_Curala-4326</name>
+	<ExtendedData><SchemaData schemaUrl="#0204111052_Altis_Antenne_Curala_4326">
+		<SimpleData name="altitudeMode">relativeToGround</SimpleData>
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">1</SimpleData>
+		<SimpleData name="visibility">1</SimpleData>
+		<SimpleData name="Climate">5</SimpleData>
+		<SimpleData name="Tx Lat / Lon">46.07895,7.21485</SimpleData>
+		<SimpleData name="ERP">0.1 W / 20 dBm</SimpleData>
+		<SimpleData name="Tx Antenna">Pattern: DIPOLE.ANT Azimuth: 0° Tilt: 0° Polarisation: v Gain: 2.14 dBi</SimpleData>
+		<SimpleData name="Modulation">Undefined</SimpleData>
+		<SimpleData name="Terrain">15</SimpleData>
+		<SimpleData name="RF model">ITM (0)</SimpleData>
+		<SimpleData name="Rx Gain">1 dBi</SimpleData>
+		<SimpleData name="File id">0204111052_Altis_Antenne_Curala.4326</SimpleData>
+		<SimpleData name="Rx Height">1m</SimpleData>
+		<SimpleData name="Clutter">0m</SimpleData>
+		<SimpleData name="Frequency">868MHz</SimpleData>
+		<SimpleData name="EIRP">0.16 W / 22.2 dBm</SimpleData>
+		<SimpleData name="Radius">10Km</SimpleData>
+		<SimpleData name="Coverage">36.5 km2</SimpleData>
+		<SimpleData name="Rx Sensitivity">-140 dBm</SimpleData>
+		<SimpleData name="Tx Height">1m</SimpleData>
+		<SimpleData name="Tx Gain">2.14 dBi</SimpleData>
+		<SimpleData name="RF Power">0.1W</SimpleData>
+		<SimpleData name="Resolution">30m</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>7.21485,46.07895</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
