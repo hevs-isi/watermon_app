@@ -35,7 +35,7 @@
                         <b-nav-item-dropdown>
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content">HUMIDITÉ</template>
-                            <b-dropdown-item :to="{ name: 'humidity', params: {id: 32 } }">Terrain M. S Vollège</b-dropdown-item>
+                            <b-dropdown-item :to="{ name: 'humidity', params: {id: 32 } }">Terrain M. S Vollèges</b-dropdown-item>
                         </b-nav-item-dropdown>
 
                     </b-navbar-nav>
