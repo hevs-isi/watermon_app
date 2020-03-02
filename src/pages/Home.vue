@@ -1,3 +1,4 @@
+import {LGeoJson} from "vue2-leaflet";
 <template>
     <div class="home">
 
@@ -21,6 +22,13 @@
                         <l-tile-layer :url="url2" name="Carte" layer-type="base" />
                         <l-tile-layer :url="url" name="Satellite" layer-type="base" />
 
+                        <l-layer-group
+                                layer-type="overlay"
+                                name="Réseau d'irrigation"
+                                :visible="true"
+                        >
+                            <l-geo-json :geojson="reseau" :options-style="optionsGeo"></l-geo-json>
+                        </l-layer-group>
                         <l-layer-group
                                 layer-type="overlay"
                                 name="Capteurs"
@@ -92,7 +100,7 @@
 
 </template>
 <script>
-    import {LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup} from 'vue2-leaflet'
+    import {LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup,LGeoJson} from 'vue2-leaflet'
     import Influx from 'influx'
     import {Icon} from 'leaflet'
     import L from 'leaflet'
@@ -119,12 +127,19 @@
     export default {
         name: 'home',
         components: {
-            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup,
+            LMap, LTileLayer, LMarker, LPopup, LControlLayers, LLayerGroup, LGeoJson
 
         },
         data() {
             return {
                 arrow: require('../assets/svg/left_arrow.svg'),
+                reseau: require('../assets/geojson/watermon2.json'),
+                optionsGeo :{
+                    weight: 2,
+                    color: "#3E4AFF",
+                    opacity: 1,
+                    fillOpacity: 1
+                },
                 showStatus:false,
                 timer: null,
                 timerIsRunning: false,
