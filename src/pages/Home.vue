@@ -147,7 +147,7 @@ import {LGeoJson} from "vue2-leaflet";
                 url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                 url2: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
                 zoom: 13,
-                center: [46.09019806912501, 7.204499244689942],
+                center: [46.06965786708025,7.227630615234376],
                 bounds: null,
                 markers: [
                     [46.096715752047594, 7.214045226573945],
