@@ -3,7 +3,7 @@
         <div style="height: 10%; overflow: auto;">
             <h3>
                 GeoJSON example as this
-                <a href="http://leafletjs.com/examples/geojson/">example</a>
+                <a href="https://leafletjs.com/examples/geojson/">example</a>
             </h3>
         </div>
         <l-map :zoom="zoom" :center="center" style="height: 90%">
@@ -55,9 +55,9 @@
                 url:
                     "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWJvdWNoYXVkIiwiYSI6ImNpdTA5bWw1azAyZDIyeXBqOWkxOGJ1dnkifQ.qha33VjEDTqcHQbibgHw3w",
                 attribution:
-                    'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                    'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                    'Imagery © <a href="https://mapbox.com">Mapbox</a>',
                 bus: {
                     geojson: data.freeBus,
                     options: {
